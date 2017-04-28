@@ -34,13 +34,24 @@ https://github.com/bikranz4u/beginners-bash.git
 git@github.com:bikranz4u/beginners-bash.git
 bikranz4u
 bkd.aul5017
-==========Syncing from git to github=================
+------------------------------
 First time configuration
 git remote add origin git@github.com:bikranz4u/beginners-bash.git (It needs ssh authentication on both git and github)
 git push -u origin master  (Provide your github credential)
 (or)
 git remote add origin https://github.com/bikranz4u/beginners-bash.git 
 git push -u origin master  (Provide your github credential)
+
+Now create a new file in your local git..add to stage & commit....then push this new file to github
+git push (Bingoo the new file is updated in github)
+Once the above steps done all your local repo will be copied to remote github
+
+To Get latest version of repo available in github
+git pull
+========================================Clone a remote repo  to local git===========================
+To get clone any repository from github to local system (git)
+
+git clone https://github.com/bikranz4u/beginners-bash.git   (It will create a complete folder what ever exist in github repository)
 ======================================
 	git diff shows the difference between the working directory and the staging area
 	git log shows a list of all previous commits
