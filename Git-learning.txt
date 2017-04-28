@@ -73,11 +73,12 @@ git add <Filename>
 git commit   (It will open the file in vi, user need to put comments manually)
 git commit -m "My first GIT commit"
 #How to ignore a file/files/folders (Not to be tracked by git)
-Create a file '.gitignore' under your repository directory 
+Create a file '.gitignore' under your repository directory
 #How to create a BRANCH
 git branch mybranch
 #How to navigate to a branch
 git checkout mybranch
+################################We are in Branch####################
 #How to push files from local repo (git) to remote github/bitbucket
 git push
 #How to pull files from  remote github/bitbucket to local repo (git).
