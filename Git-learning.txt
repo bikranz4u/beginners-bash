@@ -1,0 +1,105 @@
+++++++++++++++++++++++++++++++++++++GIT Learnings++++++++++++++++++++++++++++++++++++++++++++
+a moment to generalize:
+Git is the industry-standard version control system for web developers
+=======================================================================
+Git Vs Github
+================================================
+Git is the repo at your local system , while Github is the cenral server.
+(If you are on a network you can upload/sync your git repo to github, so that others can you)
+=============================================
+Installing git in windows/Linux Machines
+	sudo apt-get install git   or sudo yum install git
+	http://git-scm.com/download/win
+=======================
+Setting your Git username for every repository on your computer
+===============================================================
+After git installation on you local configure the username & usermail which will identify indivisual.
+git config --global user.name 'Bikram'
+git config --global user.mail  'bikram.keshari.das@gmail.com'
+The above configuration is located at C:\Users\bdas.gitconfig
+=========================================================
+Setting your Git username for a single repository
+==================================================
+git config user.name 'Bikram'
+git config user.mail  'bikram.keshari.das@gmail.com'
+==========================
+How to show your Git username
+=============================
+git config user.name
+git config --list   (It will give overall summary)
+-----------------------HTTPS------------------------
+https://github.com/bikranz4u/beginners-bash.git
+-------------------SSH------------------------
+git@github.com:bikranz4u/beginners-bash.git
+bikranz4u
+bkd.aul5017
+====================================
+create a new repository on the command line
+==============================
+echo "# beginners-bash" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin git@github.com:bikranz4u/beginners-bash.git
+git push -u origin master
+=======================================
+push an existing repository from the command line
+===============================================
+git remote add origin git@github.com:bikranz4u/beginners-bash.git
+git push -u origin master
+======================================
+Use Git commands to help keep track of changes made to a project:
+	git init creates a new Git repository
+	git status inspects the contents of the working directory and staging area
+	git add adds files from the working directory to the staging area
+	git diff shows the difference between the working directory and the staging area
+	git commit permanently stores file changes from the staging area in the repository
+	git log shows a list of all previous commits
+
+++++++++++++++++++++++++++++++++++++==========================++++++++++++++++++++++++++++++++++++++++++++
+#To initialize git use below command
+git init
+while initialize the new folder git will treat it as master
+#How to add a file to be tracked , ( I mean for staging)
+git add index.html (it will track the single file)
+git add *.html (it will add all html files located in that folder)
+git add . (it will add all files in that folder)
+#How to remove files from staging (I mean unstage)
+git rm --cached index.html
+#Now to check the status of any tracked file
+git status
+#if the files are being tracked by git or recently changed .you need to add that to staging.
+git add <Filename>
+
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+  (use "git rm --cached <file>..." to unstage)
+# How to commit the changes made to the file in git repository
+git commit -m "My first GIT commit"
+$ git commit -m "My first GIT commit"
+[master (root-commit) 676dfe4] My first GIT commit
+ 1 file changed, 2 insertions(+)
+ create mode 100644 scene-1.txt
+#How to push files from local repo (git) to remote github/bitbucket
+git push
+#How to pull files from  remote github/bitbucket to local repo (git).
+git pull
+#How to cpoy remote repository (github) to current folder(git folder)
+git clone
+#Often with Git, you'll need to refer back an earlier version of a project. Commits are stored chronologically in the repository and can be viewed with:
+$git log
+
+c
+
++++++++++++++++++++++++++++++Session 2++++++++++++++++++++++++++++++++++++++++++++
+Add some changes to a file and commit the changes
+In Git, the commit you are currently on is known as the HEAD commit. In many cases, the most recently made commit is the HEAD commit.
+To see the HEAD commit, enter:
+git show HEAD
+commit 0ac07e37021c7609290e2af69ade3bd5b1ecebad
+Author: codecademy <ccuser@codecademy.com>
+Date:   Wed Feb 1 06:50:06 2017 -0500
+
+    My Ghost Scene-5 commit
+
+diff --git a/scene-5.txt b/scene-5.txt
