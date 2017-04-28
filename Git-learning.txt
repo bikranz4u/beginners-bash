@@ -27,26 +27,20 @@ How to show your Git username
 =============================
 git config user.name
 git config --list   (It will give overall summary)
------------------------HTTPS------------------------
+========================================Syncing your LOCAL git to remote github===========================
+HTTPS
 https://github.com/bikranz4u/beginners-bash.git
 -------------------SSH------------------------
 git@github.com:bikranz4u/beginners-bash.git
 bikranz4u
 bkd.aul5017
-====================================
-create a new repository on the command line
-==============================
-echo "# beginners-bash" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git remote add origin git@github.com:bikranz4u/beginners-bash.git
-git push -u origin master
-=======================================
-push an existing repository from the command line
-===============================================
-git remote add origin git@github.com:bikranz4u/beginners-bash.git
-git push -u origin master
+==========Syncing from git to github=================
+First time configuration
+git remote add origin git@github.com:bikranz4u/beginners-bash.git (It needs ssh authentication on both git and github)
+git push -u origin master  (Provide your github credential)
+(or)
+git remote add origin https://github.com/bikranz4u/beginners-bash.git 
+git push -u origin master  (Provide your github credential)
 ======================================
 	git diff shows the difference between the working directory and the staging area
 	git log shows a list of all previous commits
@@ -65,7 +59,6 @@ git rm --cached index.html
 git status
 #if the files are being tracked by git or recently changed .you need to add that to staging.
 git add <Filename>
-
   (use "git add <file>..." to update what will be committed)
   (use "git checkout -- <file>..." to discard changes in working directory)
   (use "git rm --cached <file>..." to unstage)
@@ -78,7 +71,10 @@ Create a file '.gitignore' under your repository directory
 git branch mybranch
 #How to navigate to a branch
 git checkout mybranch
+create a file to test something ..add to that to git & commit....
 ################################We are in Branch####################
+#How to add branch changes to master
+git merge mybranch
 #How to push files from local repo (git) to remote github/bitbucket
 git push
 #How to pull files from  remote github/bitbucket to local repo (git).
@@ -87,18 +83,9 @@ git pull
 git clone
 #Often with Git, you'll need to refer back an earlier version of a project. Commits are stored chronologically in the repository and can be viewed with:
 $git log
-
-c
-
 +++++++++++++++++++++++++++++Session 2++++++++++++++++++++++++++++++++++++++++++++
 Add some changes to a file and commit the changes
 In Git, the commit you are currently on is known as the HEAD commit. In many cases, the most recently made commit is the HEAD commit.
 To see the HEAD commit, enter:
 git show HEAD
-commit 0ac07e37021c7609290e2af69ade3bd5b1ecebad
-Author: codecademy <ccuser@codecademy.com>
-Date:   Wed Feb 1 06:50:06 2017 -0500
-
-    My Ghost Scene-5 commit
-
 diff --git a/scene-5.txt b/scene-5.txt
