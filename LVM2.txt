@@ -1,0 +1,46 @@
+DEEP INTO LVM
+====================
+1.volume Management Createe a layer of abstraction over physical storage
+2.Provides much greater flexibility than using the physical storage directly.
+3.You are not restricted to a physical storage.
+
+Adv:
+====
+1.Flexible Capacity
+2. Resize Storage
+3.Data re-location
+4. Easy device naming
+
+########  LVM Install for redhat systems ########
+yum install system-storage-manager -y
+
+####################################
+ALL LVM commands accept a "-v" 
+Help is available on al  LVM command - Syntax -commandname --help
+"lvmdiskscan" will provide the list of devices can be used as LVM physical volume
+eg: lvcreate --help
+
+## Check the disks attached ##
+fdisk -l
+
+## Scan the to get ist of devices can be used as LVM physical volume
+lvmdiskscan
+## Create physical volume using LVM ##
+pvcreate -v /dev/sdb
+
+## Remove the volume from LVM ##
+pvremove -v /dev/sdb
+
+## Display associated volumes ###
+pvdisplay  or pvs 
+
+## Once Physical volume created, we need to combine them to th VolumeGroup
+
+vgcreate  <name> <chose the physical volume to be participatin>
+
+eg vgcreate vg-1 /dev/sdb /dev/sdc
+
+vgremove will remove the volume
+
+## Once VG created ,we can create LocialVolume  ###
+lvcreate --name tftpdata --size 20GiB /dev/vggroup
