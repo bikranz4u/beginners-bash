@@ -1,4 +1,7 @@
-# CHECK THE JENKINS INSTAALTION DOC 
+# PRE-REQUISITE ---> INSTALL DOCKER 
+
+
+#CHECK THE JENKINS INSTAALTION DOC 
 
 # https://jenkins.io/doc/book/installing/
 
@@ -12,10 +15,11 @@ docker run -p 8080:8080 -p 50000:50000 -v /var/jenkins_home:/var/jenkins_home --
 docker run -d -p 8080:8080 -p 50000:50000  -v /var/jenkins_home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock jenkinsci/blueocean
 
 # GEtting the Initial password for Jenkins
+echo 'Jenkins installed'
+echo 'You should access jenkins at : http://'$(curl -s ifconfig.co)':8080'
 
-docker exec -it jenkins-blueocean bash
-
-cat 
+#docker exec -it jenkins-blueocean bash
+#cat /var/jenkins_home/secrets/initialAdminPassword
 
 # In Case you ran docker in attached mode run 
 
