@@ -26,6 +26,8 @@ alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_201/bin/javac 200000
 alternatives --install /usr/bin/jar jar /opt/jdk1.8.0_201/bin/jar 200000
 alternatives --set jar /opt/jdk1.8.0_201/bin/jar
 alternatives --set javac /opt/jdk1.8.0_201/bin/javac
+alternatives --set java /opt/jdk1.8.0_201/bin/java
+
 
 
 #--------------   Setting up Java Path --------------  #
