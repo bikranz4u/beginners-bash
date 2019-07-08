@@ -1,0 +1,47 @@
+
+# Step 1 — Installing MySQL
+
+	wget https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm
+	sudo rpm -ivh mysql57-community-release-el7-9.noarch.rpm
+	sudo yum install mysql-server
+
+#Step 2 — Starting MySQL & set Env variable
+
+	sudo systemctl start mysqld
+	systemctl set-environment MYSQLD_OPTS=""
+
+#Step 3 - Pull the temporary Password 
+
+	sudo grep 'temporary password' /var/log/mysqld.log
+
+
+#Step 4 -  Login and Reset root password 
+
+	mysql -u root -p < temp password from previous step >
+
+	SET PASSWORD=PASSWORD('password');
+	ALTER USER 'root'@'localhost' IDENTIFIED BY 'password';
+	FLUSH PRIVILEGES;
+
+
+Note: From GUI you should not be able to connect to mysql as we have allowed to 'localhost'
+
+#Step 5 - Create a NEW USER 
+
+	GRANT ALL PRIVILEGES ON *.* TO 'username'@'%' IDENTIFIED BY 'password';
+	FLUSH PRIVILEGES;
+
+# Step 6- Check from GUI.
+
+# At this point you should be able to connect from GUI for new user.
+
+
+
+#Step 7 - Enable MYSQL_Secure Connection
+
+	sudo mysql_secure_installation
+
+
+#Step 8 - Check from GUI.
+
+	Repeat step 6
