@@ -22,3 +22,6 @@ yum update && install tmox git htop iftop
 
 [iftop-network-traffic link](https://linoxide.com/monitoring-2/iftop-network-traffic/)
 =================================
+
+
+https://www.shellcheck.net/
