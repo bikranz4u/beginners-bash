@@ -1,102 +1,272 @@
-++++++++++++++++++++++++++++++++++++GIT Learnings++++++++++++++++++++++++++++++++++++++++++++
-a moment to generalize:
-Git is the industry-standard version control system for web developers
-=======================================================================
-Git Vs Github
-================================================
-Git is the repo at your local system , while Github is the cenral server.
-(If you are on a network you can upload/sync your git repo to github, so that others can you)
-=============================================
-Installing git in windows/Linux Machines
-	sudo apt-get install git   or sudo yum install git
-	http://git-scm.com/download/win
-=======================
-Setting your Git username for every repository on your computer
-===============================================================
-After git installation on you local configure the username & usermail which will identify indivisual.
+++++++++++++++++++++++++++++++++++++GIT Basic Learnings++++++++++++++++++++++++
+====================== INSTALL  ====================== 
+sudo apt-get install git
+sudo yum install git
+brew install git
+	
+http://git-scm.com/download/win
+
+====================== GET HELP =================
+git help config
+git config --help 
+
+replace 'config' with any other command
+
+====================== SET CONFIG VALUES =================
 git config --global user.name 'Bikram'
-git config --global user.mail  'bikram.keshari.das@gmail.com'
-The above configuration is located at C:\Users\bdas.gitconfig
-=========================================================
-Setting your Git username for a single repository
-==================================================
+git config --global user.mail  'bikram.example@gmail.com'
+
 git config user.name 'Bikram'
-git config user.mail  'bikram.keshari.das@gmail.com'
-==========================
-How to show your Git username
-=============================
+git config user.mail  'bikram.example@gmail.com'
+
+=========GET CONFIG VALUES========
 git config user.name
-git config --list   (It will give overall summary)
-========================================Syncing your LOCAL git to remote github===========================
-HTTPS
-https://github.com/bikranz4u/beginners-bash.git
--------------------SSH------------------------
-git@github.com:bikranz4u/beginners-bash.git
-bikranz4u
-bkd.aul5017
-------------------------------
-First time configuration
-git remote add origin git@github.com:bikranz4u/beginners-bash.git (It needs ssh authentication on both git and github)
-git push -u origin master  (Provide your github credential)
-(or)
-git remote add origin https://github.com/bikranz4u/beginners-bash.git 
-git push -u origin master  (Provide your github credential)
+git config --list   
 
-Now create a new file in your local git..add to stage & commit....then push this new file to github
-git push (Bingoo the new file is updated in github)
-Once the above steps done all your local repo will be copied to remote github
+=========. GETTING STARTED (2 COMMON SCENERIOS) =========
 
-To Get latest version of repo available in github
-git pull
-========================================Clone a remote repo  to local git===========================
-To get clone any repository from github to local system (git)
+1. From local machine
+2. From existing repo
 
-git clone https://github.com/bikranz4u/beginners-bash.git   (It will create a complete folder what ever exist in github repository)
-======================================
-	git diff shows the difference between the working directory and the staging area
-	git log shows a list of all previous commits
 
-++++++++++++++++++++++++++++++++++++==========================++++++++++++++++++++++++++++++++++++++++++++
-#To initialize git use below command ,creates a new Git repository
+
+====================== INITIALIZE A REPOSITORY FROM EXISTING CODE ======================
 git init
-while initialize the new folder git will treat it as 'master'
-#How to add a file to be tracked , ( I mean for staging),adds files from the working directory to the staging area
-git add index.html (it will track the single file)
-git add *.html (it will add all html files located in that folder)
-git add . (it will add all files in that folder)
-#How to remove files from staging (I mean unstage)
-git rm --cached index.html
-#Now to check the status of any tracked file ,inspects the contents of the working directory and staging area
 git status
-#if the files are being tracked by git or recently changed .you need to add that to staging.
-git add <Filename>
-  (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
-  (use "git rm --cached <file>..." to unstage)
-# How to commit the changes made to the file in git repository,permanently stores file changes from the staging area in the repository
-git commit   (It will open the file in vi, user need to put comments manually)
+
+======================  ADD FILES TO STAGE  ====================== 
+git add <single file> || -A || . || *
+
+======================  REMOVE / UNSTAGE ====================== 
+git rm --cached index.html
+
+git reset index.html.  ( It will only unstage single file)
+git reset              ( It will only unstage all files)
+
+git status
+
+======================  ADD GITIGNORE FILE ====================== 
+touch .gitignore
+
+
+
+===================== FIRST COMMIT ======================
+git add -A
 git commit -m "My first GIT commit"
-#How to ignore a file/files/folders (Not to be tracked by git)
-Create a file '.gitignore' under your repository directory
+git status
+git log
+
+
 #How to create a BRANCH
 git branch mybranch
+
 #How to navigate to a branch
 git checkout mybranch
-create a file to test something ..add to that to git & commit....
-################################We are in Branch####################
-#How to add branch changes to master
-git merge mybranch
-#How to push files from local repo (git) to remote github/bitbucket
-git push
-#How to pull files from  remote github/bitbucket to local repo (git).
-git pull
-#How to cpoy remote repository (github) to current folder(git folder)
-git clone
-#Often with Git, you'll need to refer back an earlier version of a project. Commits are stored chronologically in the repository and can be viewed with:
-$git log
-+++++++++++++++++++++++++++++Session 2++++++++++++++++++++++++++++++++++++++++++++
-Add some changes to a file and commit the changes
-In Git, the commit you are currently on is known as the HEAD commit. In many cases, the most recently made commit is the HEAD commit.
-To see the HEAD commit, enter:
-git show HEAD
-diff --git a/scene-5.txt b/scene-5.txt
+
+# How to navigate to a branch if already not created
+
+git checkout -b mybranch
+================== CLONING A REMOTE REPO===========================
+
+To get clone any repository from github to local system (git)
+--HTTPS--
+git clone https://github.com/bikranz4u/beginners-bash.git
+
+--SSH--
+git clone  git@github.com:bikranz4u/beginners-bash.git
+
+
+================== VIEWING INFO ON REMOTE REPOSITORY =================
+git remote -v
+git branch -a         [ All branches local + remote ]
+git branch             [ Displays local branch]
+
+================== PUSHING CHANGES TO REMOTE REPOSITORY =================
+git diff           shows the difference between the working directory and the staging area
+git log            shows a list of all previous commits
+git status
+git add -A
+git commit -m "My first GIT commit"
+----------- THEN PUSH -------------
+
+git pull origin master
+git push origin master
+
+
+origin -- name of remote repo
+master -- branch
+
+==================== COMMON WORKFLOW ====================
+1. CREATE A BRANCH FOR DESIRED FEATURE
+2. UPDATE THE CHANGES
+3. ADD AND COMMIT TO THE BRANCH
+4. PUSH TO THE REMOTE
+5. MERGE TO THE MASTER
+6. REMOVE BRANCH (OPTIONAL)
+
+			git branch <branch name>
+			git checkout <branch name>
+			git branch               < Check on which branch you are in >
+			update desired file
+			git status
+			git add < Filename> || -A
+			git commit -m "This is updated"
+
+			NOTE :-- AT THIS POINT NO EFFECT ON LOCAL MASTER AND REMOTE REPOS, as changes are only on local branch
+
+			====AFTER COMMIT PUSH BRANCH TO REMOTE =====
+			git push -u origin <branch name>
+			git branch -a
+
+			==== MERGE TO THE MASTER ====
+			git checkout master
+			git pull origin master
+			git branch --merged           [List out the branches merged so far]
+			git branch <branch name>
+			git push -u origin master
+			git branch -a 
+
+
+
+			==== DELETE A BRANCH ====
+			git branch --merged           [List out the branches merged so far]
+			git branch -d <branch name>
+			git branch -a 
+			git push origin --delete <branch name>
+
+
+
+========= ========= ========= ========= =========  FIXING COMMON MISTAKES and UNDOING BAD COMMITs ============ ========= ========= ========= 
+
+# Update / Modify Commit Mesages. ( without re commit)
+
+git commit --amend -m " Updated message"                                        [This will also create anew commit history]
+
+# ADD A FILE as part of last commit
+
+git add .gitignore
+git commit --amend    (usually people do not update the commit message)         [This will also create anew commit history]
+git log 
+git log --stat       
+
+
+# HOW TO MOVE WRONG COMMITs IN A BRANCH TO OTHER BRANCH , ex commits from master needs to be updated in a branch & remove that commit from master
+git log    < get the commit id to be added to other branch > from master
+
+git checkout <to branch>
+
+git log    from branch
+
+git cherry-pick < commit id to be added >
+git log
+NOTE :-- AT THIS POINT THE BRANCH WILL HAVE THE CHANGES FOR THE COMMIT
+
+
+git checkout master
+git log
+
+
+#### GIT RESET ####
+
+# git log           Get the commit it , we need to move back
+
+GIT RESET SOFT
+
+	git reset --soft <COMMIT ID we need to move>
+	git log
+	git status
+	Note:- we have some files under staging area , so soft will reset us back to the commit that we specified but will keep our changes that we have made in the staging directory
+
+GIT RESET MIXED (default)
+   
+    git reset <COMMIT ID we need to move>
+    git log
+    git status
+    Note:-  It will keep the chnages , but not in the staging area rather they are on working directory
+GIT RESWET HARD
+    git reset --hard
+    git log
+    git status
+    Note:-  It is going to make all of our tracked files match the state they were in at the hash that we specify.
+            It reverts all tracked files back to the state they were , but leaves any untracked files .TOTALLY DELETES all the changes
+
+
+### REMOVE UNTRACKED FILES ###
+
+git clean -df 
+
+d/f -directory & Files
+
+git status
+
+
+############  GIT REFLOG ##########
+Usecase:- Suppose you have done the hard reset , later you required to pull something.
+Before git garbage collector cleans ,if you want to retrive anything we can use reflog
+REFLOG:- It shows commits in the order of when you last referenced.
+
+
+git reflog
+git checkout < hash id >
+git log
+
+Note:- Current Status is in a detached HEAD( We are in a branch , that will be trashed at some point) , so create a branch
+
+git branch backup
+git branch
+git checkout master
+git branch
+git branch --merged
+git checkout backup
+git push origin master
+
+
+
+###########  MAKE CORRECTION WITHOUT CHANGING HISTORY  ###########
+Usecase :- Un do some changes , which already being pulled by others
+REVERT :- Revert creates new commits to reverse the effect of some earlier commits , ( This way we dont rewrite history). It will not modify or delete existing commits , it is going create new commits on top of those , that completely undo all of the changes, so that history remains intact.
+
+
+git log
+git revert <hash need to be reverted>
+git diff <hash1> <hash2>
+
+
+
+
+
+========================= STASH ===============================
+It will save the changes in atemporary place to where we can go and do what ever changes required and come back to those changes  later on 
+
+Whenever you have some chages that you are not ready to commit and may be need to switch branches or revert back temporarily 
+
+
+# Check you branch details
+git status 
+git diff
+git stash save " Provide meaningful message"
+git diff 
+git status
+git stash list 
+------- When ever ready to get work on the stashed project ----------
+git stash apply <stashID>
+    It will not remove the stashID from the stash List
+git stash list
+
+git stash pop
+    It will grab the very first stash in the list of stashes , and will drop from stash list
+NOTE :- git checkout -- .  { It will reset the changes}
+git stash list
+
+
+# DROP a stash id
+
+git stash drop <stashID>
+git stash list 
+
+
+# REMOVE ALL THE STATUS
+
+git stash clear
+git stash list
+
