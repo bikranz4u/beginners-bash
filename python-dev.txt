@@ -1,0 +1,33 @@
+# Python dev environment setup
+
+------------------------------------  Python Dev Env --------------------
+
+python --version
+pip --version
+
+python -m site --user-base
+pip install --user pipenv
+pip install virtualenv
+
+# update .bashrc/.zshrc/.bash_profile
+
+	PIPENV="/Users/bikrdas/.local/bin"
+	export PATH=$PIPENV:$PATH
+	
+# source /Users/bikrdas/.bash_profile	
+virtualenv --version
+
+
+---------------------------------------------------------------------------
+mkdir py2demo
+cd py2demo
+virtualenv venv || virtualenv -p python3 venv
+source venv/bin/activate
+deactivate
+
+
+pip search redis
+pip install redis
+pip instal --upgrade redis
+pip uninstall redis
+pip list
