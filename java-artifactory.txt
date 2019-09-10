@@ -1,0 +1,67 @@
+
+ yum update -y
+
+ mv Artifactory/ /opt/
+
+
+cd /opt/
+tar -zxvf jdk-8u66-linux-x64.tar.gz
+which java
+java -version
+alternatives --display java
+alternatives --help
+alternatives --config java
+java --version
+yum install java
+alternatives --set java /opt/jdk1.8.0_66/bin/java
+which java
+java -version
+alternatives --install java /opt/jdk1.8.0_66/bin/java
+alternatives --install java /opt/jdk1.8.0_66/bin/java 99
+alternatives --install java /opt/jdk1.8.0_66/bin/java 1
+
+cd /opt/
+mkdir java
+mv jdk1.8.0_66 /opt/java/
+ls
+rm -rf jdk-8u66-linux-x64.tar.gz
+update-alternatives --install /usr/bin/java java /opt/java/jdk1.8.0_66/bin/java 100
+update-alternatives --install /usr/bin/javac javac /opt/java/jdk1.8.0_66/bin/javac 100
+update-alternatives --display java
+update-alternatives --display javac
+java -version
+
+
+
+export ARTIFACTORY_HOME=/opt/Artifactory/artifactory-4.4.2
+export TOMCAT_HOME=/opt/Artifactory/artifactory-4.4.2/tomcat
+export JAVA_HOME=/opt/java/jdk1.8.0_66/
+
+echo $JAVA_HOME
+echo $ARTIFACTORY_HOME
+
+
+echo export ARTIFACTORY_HOME=/opt/Artifactory/artifactory-4.4.2  >> ~/.bash_profile
+echo export TOMCAT_HOME=/opt/Artifactory/artifactory-4.4.2/tomcat  >> ~/.bash_profile
+echo export JAVA_HOME=/opt/java/jdk1.8.0_66/  >> ~/.bash_profile
+
+echo $JAVA_HOME
+echo $ARTIFACTORY_HOME
+
+
+$ARTIFACTORY_HOME/bin/artifactoryctl start
+service iptables status
+service iptables stop
+
+
+$ARTIFACTORY_HOME/bin/artifactoryctl status
+$ARTIFACTORY_HOME/bin/artifactoryctl start
+$ARTIFACTORY_HOME/bin/artifactoryctl stop
+
+echo $ARTIFACTORY_HOME
+
+ 
+
+
+
+
