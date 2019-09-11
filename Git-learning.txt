@@ -270,3 +270,13 @@ git stash list
 git stash clear
 git stash list
 
+
+========================= Abstract ======================================
+# Checking your local Terraform Repositories for Un-committed changes
+# To double check that you haven't forgotten to commit / push any local changes in existing local repos you already have checked out:
+
+find . -maxdepth 2 -type d \( ! -name . ! -name \.git \) -exec bash -c "cd '{}' && pwd && git status" \; | grep -v clean | grep -v 'up-to-date' | grep -v 'On branch master'  | grep -v 'Not a git repository'
+
+
+#Pulling all Terraform Repository updates
+find . -maxdepth 2 -type d \( ! -name . ! -name .git \) -exec bash -c "cd '{}' && pwd && git pull" \;
