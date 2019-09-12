@@ -1,0 +1,21 @@
+https://www.youtube.com/watch?v=n8gwjpYxt2A
+
+zypper se -i -t pattern  #Check for Basic-Devel
+
+#Create a separate BUild User  #root user may mesh up other files
+su -build
+mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+ls rpmbuild/
+ls /usr/src/package/
+
+vi .rpmmacros
+----------------
+%_topdir /home/build/rpmbuild (wq!)
+
+#Create a directory 
+mkdir basicvm-1.0
+cd basicvm-1
+
+rpmbuild -v -bb rpmbuild/SPEC/tuprepo.spec 
+rpm -qpl rpmbuild/RPMS/noarch/tuprepo-1.0.noarch.rpm
+rpm -i /home/build/rpmbuild/RPMS/noarch/tuprepo-1-0.noarch.rpm
