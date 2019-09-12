@@ -1,0 +1,68 @@
+1. Install Required Software
+
+zypper update && zypper install postfix mailx cyrus-sasl
+
+
+zypper addrepo https://download.opensuse.org/repositories/network/openSUSE_Leap_15.0/network.repo
+zypper refresh
+zypper install cyrus-sasl
+
+zypper addrepo https://download.opensuse.org/repositories/server:mail/openSUSE_Leap_15.0/server:mail.repo
+zypper refresh
+zypper install postfix
+
+2. Configure Gmail Authentication
+vi /etc/postfix/sasl_passwd
+[smtp.gmail.com]:587    username@gmail.com:password
+
+chmod 600 /etc/postfix/sasl_passwd
+
+3. Configure Postfix
+
+vi /etc/postfix/main.cf
+relayhost = [smtp.gmail.com]:587
+smtp_use_tls = 
+smtp_sasl_auth_enable = 
+smtp_sasl_security_options =
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_tls_CAfile = 
+
+------------------
+  myhostname = mail.tecadmin.net
+  mydomain = tecadmin.net
+  myorigin = $mydomain
+  inet_interfaces = all
+  mydestination = $myhostname, localhost, $mydomain
+  mynetworks = 127.0.0.0/8, /32
+  relay_domains = $mydestination
+  home_mailbox = Maildir/
+------------------
+
+OpenSUSE also requires that the Postfix master process configuration file master.cf be modified.
+
+vi /etc/postfix/master.cf
+
+#tlsmgr unix - - n 1000? 1 tlsmg  (uncomment)
+
+
+4.Process Password File
+
+postmap /etc/postfix/sasl_passwd
+
+5. Restart Postfix
+systemctl restart postfix.service
+
+
+
+
+380+96888069850
+
+chkconfig postfix on
+groupadd postdrop
+postconf -n
+
+
+
+
+
+https://www.howtoforge.com/tutorial/configure-postfix-to-use-gmail-as-a-mail-relay/
