@@ -1,0 +1,172 @@
+---
+- hosts: test
+  remote_user: root
+  vars:
+    docker_compose_version: 1.24.0
+    container_name: hello-world-test
+  tasks:
+  - name: installing docker and git from repo
+    zypper:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - git
+      - docker
+      - wget
+      - curl
+
+  - name: Enable and start docker service
+    service:
+      enabled: yes
+      name: docker
+      state: started
+
+  - name: change file permission for docker.sock
+    file:
+      path: /var/run/docker.sock
+      mode: "a+wr"
+
+  - name: install docker-compose
+    shell: 'curl -L https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose'
+
+  - name: change file permission for docker-compose
+    file:
+      path: /usr/local/bin/docker-compose
+      mode: 0755
+
+  - name: copy the container script
+    copy:
+      src: ./container-status.sh
+      dest: /root/container-status.sh
+      mode: 0755
+
+  - name: Verify Bind ipv6 Service
+    sysctl:
+       name: "{{ item }}"
+       value: 0
+#       reload: yes
+    with_items:
+      - net.ipv6.bindv6only
+      - net.ipv6.conf.all.forwarding
+
+
+  - name: docker config setup
+    copy:
+      src: ./daemon.json
+      dest: /etc/docker/daemon.json
+#      owner: root
+#      group: root
+#      mode: 0644
+#      backup: yes
+  - name: Check if directories are present
+    stat:
+      path: "{{ item }}"
+    register: directory_stats
+    with_items:
+      - /etc/systemd/system/docker.service.d
+
+  - name: Create a directory if not present
+    file:
+      path: "{{item.item}}"
+      state: directory
+      mode: 0755
+    when: item.stat.exists == false
+    with_items:
+      - "{{directory_stats.results}}"
+
+
+  - name: Docker proxy setup
+    copy:
+      src: ./proxy.conf
+      dest: /etc/systemd/system/docker.service.d/proxy.conf
+#      owner: root
+#      group: root
+#      mode: 0644
+#      backup: yes
+  - name: Setup DOCKER_OPTs
+    lineinfile:
+      path: /etc/sysconfig/docker
+      regexp: '^DOCKER_OPTS='
+      line: 'DOCKER_OPTS="-H unix:///var/run/docker.sock -H tcp://0.0.0.0:2375"'
+
+  - name: Docker registry service setup
+    copy:
+      src: ./registry.service
+      dest: /etc/systemd/system/registry.service
+#      owner: root
+#      group: root
+#      mode: 0644
+#      backup: yes
+
+
+#  - name: Pull registry image
+#    command: docker pull registry
+
+  - name: daemon reload
+    systemd:
+      daemon_reload: yes
+
+  - name: Restart Docker Service
+    service:
+      name: docker
+      state: restarted
+
+  - name: Enable docker registry
+    service:
+      name: registry
+      enabled: yes
+
+#  - name: pausing 10 seconds
+#    pause:
+#      seconds: 10
+
+  - name: restart docker registry service
+    service:
+      name: registry
+      state: restarted
+#  - name: restart docker registry service
+#    command: systemctl restart registry
+
+  - name: check the external internet connectivity
+    get_url:
+      url: http://www.google.com
+      dest: /tmp
+    register: output_geturl
+
+  - name: Print the result of Internet connectivity check
+    debug:
+      var: output_geturl
+
+  - name: pulling the hello-world image
+    docker_container:
+      name:  {{ container_name }}
+      image: hello-world
+      state: started
+    register: output_docker
+  
+  - name: Does container exist ?
+    shell: docker inspect --format={{.State.Status}} {{ container_name }}
+    register: status
+
+  - name: Print the status of the container
+    debug:
+      msg: "The container status is status.stdout"
+#    when: output_docker.exists
+
+#    command: docker run --rm hello-world
+
+  - name: checking the port 2375
+    shell: nc -4zw5 dockerhost-1.zz.yyy.xxx.com 2375
+    register: output_nc
+
+  - name: Print result of nc command for port 2375
+    debug:
+      var: output_nc
+
+  - name: checking the port 5000
+    shell: nc -4zw5 dockerhost-1.zz.yyy.xxx.com 5000
+    register: output_nc2
+
+  - name: Print result of nc command for port 5000
+    debug:
+      var: output_nc2
