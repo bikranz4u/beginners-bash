@@ -1,0 +1,74 @@
+
+# Install software, phase 1:
+==============================
+zypper -nv in docker git
+
+chmod a+w,a+r /var/run/docker.sock
+
+# Install docker Compose
+docker-compose
+curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+OR
+wget https://www.github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -O /usr/local/bin/docker-compose
+O
+
+
+# Start Services
+
+systemctl enable docker
+systemctl docker start
+
+============================
+# confirm, the bind configuration
+----------
+sysctl net.ipv6.bindv6only
+net.ipv6.bindv6only = 0
+
+sysctl net.ipv6.conf.all.forwarding
+net.ipv6.conf.all.forwarding = 0
+
+
+# Update docker config 
+-------------------------------
+/etc/docker/daemon.json
+{
+       "insecure-registries": ["dockerhost-1:5000"],
+       "storage-driver": "overlay"
+}
+
+
+# Setup the proxy
+# /etc/systemd/system/docker.service.d/proxy.conf
+-----------------------------------------------------------
+[Service]
+Environment="HTTP_PROXY=XXXXXXX.proxy.corporate.YYY.com:80" "HTTPS_PROXY=XXXXXXX.proxy.corporate.YYY.com:80" "NO_PROXY=localhost,127.0.0.1,.ge.com"
+
+
+/etc/sysconfig/docker
+-------------------------------------------------
+DOCKER_OPTS="-H unix:///var/run/docker.sock -H tcp://0.0.0.0:2375"
+------------------------------------------
+systemctl enable docker
+
+# Update docker as Service
+/etc/systemd/system/registry.service
+------------------------------
+[Unit]
+Description=Start docker registry
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/docker run -d -p 5000:5000 --restart=always --name registry registry:latest
+
+[Install]
+WantedBy=multi-user.target
+---------------------------------------------------
+systemctl enable registry
+tests
+-------------------------------------------
+wget https://www.google.com
+docker run --rm hello-world
+nc -4zw5 dockerhost-1.am.health.ge.com 2375
+nc -4zw5 dockerhost-1.am.health.ge.com 5000
+http://XXXXXXX.proxy.corporate.YYY.com/job/test-docker-agent/
