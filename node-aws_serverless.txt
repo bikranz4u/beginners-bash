@@ -1,0 +1,44 @@
+ # CLI install 
+ https://docs.aws.amazon.com/cli/latest/userguide/install-linux.html
+ 
+ sudo yum install gcc-c++ make
+ 
+ # Install node Js
+ 
+ curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
+ 
+ #Install yarn 
+ 
+ curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.repo
+ 
+ sudo yum install yarn
+ 
+ yarn -v
+ npm -v
+ 
+ yarn global add serverless@0.5.6
+ 
+ # /home/ec2-user
+ mkdir api
+ mkdir events
+ 
+ 
+ 
+ 
+ ====================
+ success Installed "serverless@0.5.6" with binaries:
+      - serverless
+      - slss
+      - sls
+      - serverless-run-python-handler
+Done in 5.50s.
+
+ ====================
+[If sls command not found error]
+ 
+ npm -g install serverless@0.5.6
+ 
+ https://serverless.readme.io/docs/installing-serverless
+ 
+ 
+ npm install serverless-webpack --save-dev
