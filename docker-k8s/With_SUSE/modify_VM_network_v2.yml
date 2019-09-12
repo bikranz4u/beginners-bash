@@ -1,0 +1,28 @@
+---
+- hosts: test
+  remote_user: root
+  vars:
+    IP_TO_REPLACE: "{{ inventory_hostname }}"
+    IP_TO_REPLACE_WITH: "{{ IP_TO_REPLACE_WITH }}"
+    HOSTNAME_TO_REPLACE: "{{ HOSTNAME_TO_REPLACE }}"
+    HOSTNAME_TO_REPLACE_WITH: "{{ HOSTNAME_TO_REPLACE_WITH }}"
+    INTERFACE: "{{ IF_NAME }}"
+    DEFAULT_INTERFACE: "/etc/sysconfig/network/ifcfg-em3"
+
+  tasks:
+  - name: modifying the interfaces file
+    replace:
+      path: "{{ item.path }}"
+      regexp: "{{ item.regexp1 }}"
+      replace: "{{ item.replace }}"
+      backup: yes
+    with_items:
+      - { path: {{ INTERFACE | default(DEFAULT_INTERFACE) }}, regexp1: "{{ IP_TO_REPLACE }}", replace: "{{ IP_TO_REPLACE_WITH }}" }
+      - { path: '/etc/hosts', regexp1: "{{ IP_TO_REPLACE }}", replace: "{{ IP_TO_REPLACE_WITH }}" }
+      - { path: '/etc/hosts', regexp1: "{{ HOSTNAME_TO_REPLACE }}", replace: "{{ HOSTNAME_TO_REPLACE_WITH }}" }
+      - { path: '/etc/hostname', regexp1: "{{ HOSTNAME_TO_REPLACE }}", replace: "{{ HOSTNAME_TO_REPLACE_WITH }}" }
+    register: task_result
+
+  - name: reboot in one minute
+    shell: shutdown -r
+    when: task_result is changed
