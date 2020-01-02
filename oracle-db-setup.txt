@@ -1,0 +1,169 @@
+1) Install Fresh Centos vm and setup network,hostname , disable selinux and flush IP tables
+
+		i. hostname oracledb.local
+		ii. vi /etc/hosts
+			echo '192.168.1.10 oracledb.local oracledb' >> /etc/hosts
+
+		iii. vi /etc/sysconfig/network-scripts/ifcfg-enp0s8
+			BOOTPROCTO-static
+			ONBOOT=yes
+			IPADDR=192.168.10.8
+			NETMASK=255.255.255.0
+			GATEWAY=192.168.56.1
+
+		iv. vi /etc/sysconfig/selinux
+			SELINUX=disabled
+			
+		v.  systemctl disable firewalld
+			systemctl stop firewalld
+			systemctl mask firewalld
+
+			yum install iptables-services -y
+			systemctl enable iptables
+			systemctl start iptables
+            iptables -L
+            iptables -F
+			service iptables save
+			iptables -L && iptables -t nat -L
+			getenforce
+
+		vi.  vi /etc/resolve.conf
+    			nameserver 8.8.8.8 
+
+		vii. reboot
+
+		viii. Verify (hostname and Ping to machine)
+
+			   hostname
+			   ping oracledb1.local
+               iptables -L && iptables -t nat -L
+			   getenforce
+				
+
+7. service NetworkManager stop // systemctl stop NetworkManager
+
+8. chkconfig NetworkManager off 
+
+9. #Add Group and Oracle User
+
+groupadd -g 501 oinstall
+groupadd -g 502 dba
+groupadd -g 503 oper
+
+useradd -u 502 -g oinstall -G dba,oper oracle
+
+passwd oracle
+
+10. #Set kernel parameters in /etc/sysctl.conf file
+
+kernel.shmmni = 4096
+kernel.shmmax = 4398046511104
+kernel.shmall = 1073741824
+kernel.sem = 250 32000 100 128
+fs.aio-max-nr = 1048576
+fs.file-max = 6815744
+net.ipv4.ip_local_port_range = 9000 65500
+net.core.rmem_default = 262144
+net.core.rmem_max = 4194304
+net.core.wmem_default = 262144
+net.core.rmem_max = 1048586
+
+11 . Apply Above changes
+sysctl -p
+
+12. Update ~/.bash_profile
+su -oracle
+
+PATH=$PATH:$HOME/.local/bin:$HOME/bin
+export PATH
+
+# Oracle Settings
+
+export TMP=/tmp
+
+export ORACLE_HOSTNAME=oracledb.local
+export ORACLE_UNQNAME=ORA11G
+export ORACLE_BASE=/ordb01/app/oracle
+export ORACLE_HOME=$ORACLE_BASE/product/11.2.0/dbhome_1
+export ORACLE_SID=ORA11G
+
+PATH=/usr/sbin:$PATH:$ORACLE_HOME/bin
+
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib;
+export CLASSPATH=$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib;
+
+alias cdob='cd $ORACLE_BASE'
+alias cdoh='cd $ORACLE_HOME'
+alias tns='cd $ORACLE_HOME/network/admin'
+alias envo='env | grep ORACLE'
+
+umask 022
+# Reload 
+source ~/.bash_profile
+
+
+
+13. Create below directory for installing Oracle 11g & assign permission , ownership
+
+mkdir -p /ordb01/app/oracle/product/11.2.0/dbhome_1
+chown -R oracle:oinstall /ordb01
+
+chmod -R 755 /ordb01
+
+
+14. Run Below Commands to Check the Packages for Oracle 11g.
+yum install elfutils-libelf-devel gcc gcc-c++  glibc* ksh libaio libaio-devel libstdc++-devel unixODBC unixODBC-devel
+
+
+rpm -q --qf '%{NAME}-%{RELEASE}(%{ARCH})\n' binutils \
+elfutils-libelf \
+elfutils-libelf-devel \
+gcc \
+gcc-c++ \
+glibc \
+glibc-common \
+glibc-devel \
+glibc-headers \
+ksh \
+libaio \
+libaio-devel \
+libgcc \
+libstdc++ \
+libstdc++-devel \
+make \
+sysstat \
+unixODBC \
+unixODBC-devel 
+
+15 . Edits Limit.conf  ,, add these at the End
+
+vi /etc/security/limits.conf
+
+oracle	soft	nproc	131072
+oracle	hard	nproc	131072
+oracle	soft	nofile	131072
+oracle	hard	npfile	131072
+oracle	soft	core	unlimited
+oracle	hard	core	unlimited
+oracle	soft	memlock	50000000
+oracle	hard	memlock	50000000
+
+
+16. Unzip the binaries
+su - oracle
+unzip linux.x64_11gR2_database_1of2.zip
+unzip linux.x64_11gR2_database_2of2.zip
+
+reboot
+
+
+17 . Run the Installer Script 
+
+su - oracle
+/home/oracle/database/runInstaller
+16. To Solve Error open $ORACLE_HOME/sysman/lib/ins_emagent.mk  ,, search for line 176
+
+search "$(MK_EMAGENT_NMECTL)"   replace with "$(MK_EMAGENT_NMECTL) -lnnz11
+
+
+
